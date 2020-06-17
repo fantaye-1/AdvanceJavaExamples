@@ -25,17 +25,19 @@ public class FilesExample {
 		System.out.println("Last modified: " + file.lastModified());
 		
 		
-		File dir = new File("esources/temp1.txt");
+		File dir = new File("resources/temp");
 		
 		boolean created = dir.mkdir();
 		
 		if(created) {
 			System.out.println("dirctory is created");
+		}else {
+			System.out.println("directory is not created");
 		}
 		//....
 		
 		
-		File filewithDir = new File("resources/dir1/newFile.txt");
+		//File withDir = new File("resources/dir1/newFile.txt");
 		
 		//bufferReader and writer.
 		
