@@ -1,55 +1,47 @@
 package com.cognixia.jump.advancejava.files;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 
+/**
+ * Reads a file one character at a time with a {@link BufferedReader},
+ * stopping at the first 'K'.
+ */
 public class ReadChar {
 
-	public ReadChar() {
-		// TODO Auto-generated constructor stub
+	static final char STOP_CHAR = 'K';
+
+	/**
+	 * Reads characters from {@code reader} until {@code stop} is found
+	 * (inclusive) or the end of the stream is reached.
+	 */
+	public static String readUntil(Reader reader, char stop) throws IOException {
+		StringBuilder text = new StringBuilder();
+		int charValue;
+		while ((charValue = reader.read()) != -1) {
+			char letter = (char) charValue;
+			text.append(letter);
+			if (letter == stop) {
+				break;
+			}
+		}
+		return text.toString();
 	}
 
 	public static void main(String[] args) {
-		// TODO buffer reader and writer exercices.
-		
-		File file  = new File("resources/temp.txt");
-		
-		FileReader fileReader = null;
-		BufferedReader reader = null;
-		
-		try {
-			fileReader = new FileReader(file);
-			reader = new BufferedReader(fileReader);
-			int charValue;
-			
-			while((charValue = reader.read() ) != -1) {
-				char letter = (char) charValue;
-				System.out.print("temp.txt");
-				if(letter == 'K') {
-					break;
-				}
-			}
-			reader.skip(5L); // skips 5 charachters
-			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch(IOException e) {
-			e.printStackTrace();
-		}finally {
-			try {
-				fileReader.close();
-				reader.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}
+		String path = args.length > 0 ? args[0] : "resources/temp.txt";
 
+		// try-with-resources closes the reader even when reading fails,
+		// and avoids the NullPointerException the old finally block threw
+		// when the file did not exist.
+		try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
+			System.out.print(readUntil(reader, STOP_CHAR));
+			System.out.println();
+		} catch (IOException e) {
+			System.err.println("Could not read " + path + ": " + e.getMessage());
+		}
 	}
 
 }
